@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#534AB7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="一件小事">
+<title>今天做一件小事</title>
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;padding:0;background:#F5F4F0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Helvetica,sans-serif;color:#2C2C2A;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:480px;margin:0 auto;padding:20px 16px 40px}
+  h1{font-size:19px;font-weight:500;margin:0 0 4px;letter-spacing:0.5px}
+  .sub{font-size:12px;color:#888780;margin:0 0 18px}
+  .stat{display:flex;gap:10px;margin-bottom:18px}
+  .stat div{flex:1;background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:10px;padding:10px 12px}
+  .stat p{margin:0}
+  .stat .k{font-size:11px;color:#888780}
+  .stat .v{font-size:20px;font-weight:500;margin-top:2px}
+  .lab{font-size:12px;color:#888780;margin:0 0 8px}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+  .chips button{padding:6px 13px;border-radius:999px;border:0.5px solid rgba(0,0,0,.12);background:#fff;color:#5F5E5A;font-size:13px;font-family:inherit;cursor:pointer;transition:none}
+  .chips button.on{background:#EEEDFE;color:#3C3489;border-color:#AFA9EC}
+  #draw{width:100%;background:#534AB7;color:#fff;font-size:16px;font-weight:500;font-family:inherit;padding:14px;border:none;border-radius:12px;cursor:pointer}
+  #draw:active{background:#3C3489}
+  .card{background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:14px;padding:16px;margin-top:14px;min-height:110px}
+  .card .hint{color:#A8A6A0;font-size:13px;margin:0}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px}
+  .tags span{font-size:11px;padding:3px 9px;border-radius:999px;background:#F1EFE8;color:#5F5E5A}
+  .tags span.t{background:#E1F5EE;color:#0F6E56}
+  .tags span.m{background:#EEEDFE;color:#3C3489}
+  .tt{font-size:17px;font-weight:500;margin:0 0 7px}
+  .dd{font-size:14px;color:#5F5E5A;margin:0}
+  .need{background:#F5F4F0;border-radius:10px;padding:9px 11px;margin-top:11px}
+  .need p{margin:0}
+  .need .k{font-size:11px;color:#888780;margin-bottom:2px}
+  .need .v{font-size:13px}
+  .acts{display:none;gap:9px;margin-top:11px}
+  .acts span{flex:1;text-align:center;padding:11px;border-radius:10px;font-size:14px;cursor:pointer;font-weight:500}
+  .acts .a1{background:#EEEDFE;color:#3C3489}
+  .acts .a2{background:#E1F5EE;color:#0F6E56}
+  .acts .a2.done{background:#1D9E75;color:#fff}
+  hr{border:none;border-top:0.5px solid rgba(0,0,0,.1);margin:26px 0 16px}
+  .sec{font-size:15px;font-weight:500;margin:0 0 3px}
+  .secsub{font-size:12px;color:#888780;margin:0 0 10px}
+  textarea{width:100%;border:0.5px solid rgba(0,0,0,.12);border-radius:10px;padding:11px 12px;font-size:14px;font-family:inherit;background:#fff;color:#2C2C2A;resize:vertical;line-height:1.7}
+  textarea:focus{outline:none;border-color:#AFA9EC}
+  #add{width:100%;margin-top:9px;background:#fff;border:0.5px solid rgba(0,0,0,.12);color:#2C2C2A;font-size:14px;font-family:inherit;padding:11px;border-radius:10px;cursor:pointer;font-weight:500}
+  #add:active{background:#F1EFE8}
+  .msg{display:none;font-size:12px;margin:9px 0 0}
+  .list{margin-top:14px}
+  .list .lh{font-size:12px;color:#888780;margin:0 0 7px}
+  .item{display:flex;align-items:flex-start;gap:10px;background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:10px;padding:10px 12px;margin-bottom:7px}
+  .item .t{flex:1;font-size:14px;word-break:break-all}
+  .item .d{font-size:12px;color:#A32D2D;cursor:pointer;padding-top:2px;flex-shrink:0}
+  .item .d:active{opacity:.5}
+  .foot{font-size:11px;color:#A8A6A0;text-align:center;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>今天做一件小事</h1>
+  <p class="sub">不知道做什么的时候，点一下，做掉它</p>
+
+  <div class="stat">
+    <div><p class="k">累计做过</p><p class="v" id="s-total">0</p></div>
+    <div><p class="k">连续天数</p><p class="v" id="s-streak">0</p></div>
+    <div><p class="k">我加的</p><p class="v" id="s-mine">0</p></div>
+  </div>
+
+  <p class="lab">场景</p>
+  <div class="chips" id="f-place">
+    <button data-v="all" class="on">都可以</button>
+    <button data-v="home">宅在家</button>
+    <button data-v="out">要出门</button>
+    <button data-v="mine">我加的</button>
+  </div>
+
+  <p class="lab">时间</p>
+  <div class="chips" id="f-time">
+    <button data-v="99" class="on">不限</button>
+    <button data-v="10">10 分钟内</button>
+    <button data-v="30">半小时</button>
+  </div>
+
+  <button id="draw">抽一件</button>
+
+  <div class="card" id="card"><p class="hint">选好条件，点上面抽一件。<br>抽到什么就做什么，别挑。</p></div>
+
+  <div class="acts" id="acts">
+    <span class="a1" id="again">换一个</span>
+    <span class="a2" id="ok">做完打卡</span>
+  </div>
+
+  <hr>
+
+  <p class="sec">想做点什么</p>
+  <p class="secsub">一行一条，可以一次写好几条</p>
+  <textarea id="i-t" rows="3" placeholder="给杯子去茶垢&#10;翻出高中同学录&#10;把阳台的椅子擦一遍"></textarea>
+  <button id="add">加上</button>
+  <p class="msg" id="msg"></p>
+  <div class="list" id="list"></div>
+
+  <p class="foot">数据只存在这台手机上，不会上传</p>
+</div>
+
+<script>
+var BUILTIN=[
+{t:"清空一个抽屉",d:"挑家里最小的一个抽屉，全部拿出来，只放回一半。",n:"一个抽屉、一个垃圾袋",p:"home",m:10,c:"0 元"},
+{t:"拍一张今天的光",d:"找窗外或桌上一处光影，拍下来调成黑白，设为手机壁纸。",n:"手机",p:"home",m:5,c:"0 元"},
+{t:"换一种喝法",d:"平时喝热水就泡茶，喝咖啡就换冷水冲，用没试过的方式做一杯。",n:"杯子、家里现成的饮品",p:"home",m:10,c:"0 元"},
+{t:"照片断舍离",d:"打开相册最近 100 张，狠心删到只剩 10 张值得留的。",n:"手机",p:"home",m:15,c:"0 元"},
+{t:"挪一件家具",d:"把椅子、台灯或摆件换个位置，感受一下空间变化。",n:"无，动手就行",p:"home",m:10,c:"0 元"},
+{t:"揪出 5 样过期品",d:"翻厨房和药箱，找出过期或坏掉的东西，扔掉。",n:"一个垃圾袋",p:"home",m:15,c:"0 元"},
+{t:"学一个拉伸动作",d:"搜一个肩颈或腰部的拉伸，跟着做完，把它记住。",n:"一块能躺下的地方",p:"home",m:10,c:"0 元"},
+{t:"用 3 种食材做一道菜",d:"打开冰箱随便挑三样，做出来就算成功。",n:"冰箱里任意 3 样、一口锅",p:"home",m:30,c:"0 元"},
+{t:"给植物擦叶子",d:"每片叶子擦一遍，顺便浇透水。",n:"湿毛巾、水",p:"home",m:10,c:"0 元"},
+{t:"画下窗外的样子",d:"不用画得好，纸笔随手画 5 分钟，写上日期收起来。",n:"纸、笔",p:"home",m:15,c:"0 元"},
+{t:"整理电脑桌面",d:"所有文件塞进三个文件夹：在做、存档、待处理。",n:"电脑",p:"home",m:15,c:"0 元"},
+{t:"重排书架",d:"按高度、颜色，或者按你自己的奇怪规则重排一遍。",n:"书架上的书",p:"home",m:30,c:"0 元"},
+{t:"洗一个一直没洗的东西",d:"键盘、鼠标垫、门把手、垃圾桶，随便挑一个。",n:"抹布、水",p:"home",m:15,c:"0 元"},
+{t:"给杯子去茶垢",d:"小苏打加一点水，用旧牙刷刷一遍，冲干净。",n:"小苏打、旧牙刷",p:"home",m:10,c:"0 元"},
+{t:"换床单",d:"把床单被套换下来洗，顺便把枕头拍松。",n:"一套干净床单",p:"home",m:20,c:"0 元"},
+{t:"整理充电线",d:"把所有线和充电头摊开，配好对，坏的直接扔。",n:"无，动手就行",p:"home",m:15,c:"0 元"},
+{t:"给鞋柜做减法",d:"挑一双一年没穿的鞋，擦干净放门口，明天穿它出门。",n:"抹布",p:"home",m:15,c:"0 元"},
+{t:"清空一个收藏夹",d:"购物 App 收藏夹里不会再买的删掉，只留三件。",n:"手机",p:"home",m:10,c:"0 元"},
+{t:"洗头并认真吹干",d:"不赶时间，慢慢吹，顺便修一下分叉。",n:"洗发水、吹风机",p:"home",m:30,c:"0 元"},
+{t:"找出家里的 5 种颜色",d:"数一数家里出现最多的颜色，拍一张最典型的。",n:"手机",p:"home",m:10,c:"0 元"},
+{t:"把台面清空",d:"厨房或洗手台的台面，只留一样东西。",n:"无，动手就行",p:"home",m:10,c:"0 元"},
+{t:"听一张完整的专辑",d:"不跳歌，从第一首听到最后一首。",n:"耳机或音箱",p:"home",m:30,c:"0 元"},
+{t:"重折一格衣柜",d:"学一个叠衣法，把衣柜最乱的那一格重新折一遍。",n:"衣柜里的一格",p:"home",m:15,c:"0 元"},
+{t:"煮一锅白粥并认真吃",d:"不放配菜，尝一口米本身的味道。",n:"米、锅",p:"home",m:30,c:"0 元"},
+{t:"把今天穿的衣服挂好",d:"不随手扔椅背，全部归位。",n:"衣架",p:"home",m:5,c:"0 元"},
+{t:"记下冰箱里有什么",d:"写完贴在冰箱门上，下次买菜前看一眼。",n:"纸、笔、磁铁或胶带",p:"home",m:10,c:"0 元"},
+{t:"擦一次窗户",d:"擦一扇就够，看看外面清楚了多少。",n:"抹布、水",p:"home",m:15,c:"0 元"},
+{t:"修好一件坏了的小东西",d:"松动的螺丝、掉线的纽扣，今天修好它。",n:"螺丝刀或针线",p:"home",m:20,c:"0 元"},
+{t:"泡脚 15 分钟",d:"水温别太烫，什么都不干，就泡着。",n:"盆、热水",p:"home",m:15,c:"0 元"},
+{t:"备好明天出门的东西",d:"衣服、钥匙、包，提前摆好，明天不慌。",n:"无，动手就行",p:"home",m:10,c:"0 元"},
+{t:"走一条没走过的路",d:"出门后每次到岔路都选不常走的那边，走 20 分钟。",n:"一双舒服的鞋、手机",p:"out",m:30,c:"0 元"},
+{t:"买一种没吃过的零食",d:"去便利店挑包装最陌生的那个，回来认真尝一口。",n:"零钱 10 元",p:"out",m:15,c:"10 元内"},
+{t:"数红色",d:"路上数红色车或红色招牌，数到 10 个就收工。",n:"无，用眼睛就行",p:"out",m:20,c:"0 元"},
+{t:"坐一站陌生公交",d:"随便上一趟没坐过的车，坐一站下车，逛 10 分钟再回。",n:"零钱 4 元",p:"out",m:30,c:"10 元内"},
+{t:"收集 5 种叶子",d:"去小区或公园找 5 片形状不同的叶子，夹在书里。",n:"一本厚书、一个口袋",p:"out",m:30,c:"0 元"},
+{t:"拍九张同一个颜色",d:"先定一个颜色，出门只拍这个颜色的东西，凑满 9 张。",n:"手机",p:"out",m:30,c:"0 元"},
+{t:"进一家没进过的店",d:"找一家从没进过的小店，进去问老板一个问题。",n:"无，开口就行",p:"out",m:15,c:"0 元"},
+{t:"给流浪猫狗拍肖像",d:"蹲下来平视拍一张，回家给它起个名字。",n:"手机",p:"out",m:20,c:"0 元"},
+{t:"买一样不认识的菜",d:"去菜市场指一样叫不出名字的菜，问摊主怎么做。",n:"零钱 20 元",p:"out",m:30,c:"20 元内"},
+{t:"去免费的地方待半小时",d:"图书馆、美术馆、商场顶楼，坐着什么也不干。",n:"无，走过去就行",p:"out",m:30,c:"0 元"},
+{t:"二手店淘一本书",d:"找一本 10 元以内的书，不看评价，直接买。",n:"零钱 10 元",p:"out",m:30,c:"10 元内"},
+{t:"走到最高那栋楼下",d:"找附近最高的楼，走到它脚下，抬头看一分钟。",n:"无，走过去就行",p:"out",m:30,c:"0 元"},
+{t:"边走边写 100 字",d:"戴上耳机走一段路，回来把看到的写成 100 字。",n:"手机备忘录",p:"out",m:30,c:"0 元"},
+{t:"看一次日落",d:"查今天日落时间，提前十分钟到能看到天的地方。",n:"手机查时间",p:"out",m:30,c:"0 元"},
+{t:"数一数路上遇到的狗",d:"散步时数见到的狗，记住最可爱那只的样子。",n:"无，用眼睛就行",p:"out",m:20,c:"0 元"},
+{t:"买一枝花带回家",d:"菜市场或花店买一枝，找个瓶子插上。",n:"零钱 10 元",p:"out",m:20,c:"10 元内"},
+{t:"走楼梯不坐电梯",d:"找一栋有楼梯的楼，一口气走上去。",n:"无，走过去就行",p:"out",m:15,c:"0 元"},
+{t:"去公园坐 20 分钟",d:"什么都不带，找张长椅坐下，看人。",n:"无，走过去就行",p:"out",m:20,c:"0 元"},
+{t:"查一条路的名字",d:"走到路牌下拍一张，查查这个名字是怎么来的。",n:"手机",p:"out",m:20,c:"0 元"},
+{t:"买一张明信片寄给自己",d:"写一句今天的状态，投进邮筒，等它寄到。",n:"零钱 5 元、笔",p:"out",m:20,c:"10 元内"},
+{t:"给路边的树拍证件照",d:"正面、全身、不裁切，像拍证件照一样拍一棵树。",n:"手机",p:"out",m:15,c:"0 元"},
+{t:"走完一条街的两端",d:"选一条你只走过一半的街，从这头走到那头。",n:"一双舒服的鞋",p:"out",m:30,c:"0 元"},
+{t:"找小区里最老的那棵树",d:"看看它有多粗，抱一下试试。",n:"无，走过去就行",p:"out",m:20,c:"0 元"},
+{t:"逛菜市场什么都不买",d:"只看不买，听听摊主怎么吆喝。",n:"无，走过去就行",p:"out",m:30,c:"0 元"},
+{t:"给三个月后的自己写 50 字",d:"写在备忘录里，设个三个月后的提醒，写完别改。",n:"手机备忘录",p:"both",m:5,c:"0 元"},
+{t:"记三件还不错的小事",d:"睡前写下来，越具体越好，比如「中午的汤很烫」。",n:"备忘录或纸笔",p:"both",m:5,c:"0 元"},
+{t:"给一个老朋友发消息",d:"想一个半年没联系的人，发一句具体的、真心的问候。",n:"手机",p:"both",m:5,c:"0 元"},
+{t:"单曲循环一首老歌",d:"挑一首很久没听的歌，循环三遍，什么都别做。",n:"耳机",p:"both",m:15,c:"0 元"},
+{t:"今天只喝白水",d:"从现在到睡前不喝别的，睡前记一下感受。",n:"一杯水",p:"both",m:5,c:"0 元"},
+{t:"给家人发一张今天的照片",d:"不用解释，就发一张，等他来问。",n:"手机",p:"both",m:5,c:"0 元"},
+{t:"写下今天听到的一句话",d:"路上、店里、电视里听到的，写下来就行。",n:"备忘录或纸笔",p:"both",m:5,c:"0 元"}
+];
+
+var K_C="xds_custom_v1", K_D="xds_done_v1";
+var custom=[], done={};
+try{custom=JSON.parse(localStorage.getItem(K_C)||"[]");}catch(e){custom=[];}
+try{done=JSON.parse(localStorage.getItem(K_D)||"{}");}catch(e){done={};}
+
+var place="all", maxm=99, cur=null;
+
+function today(){var d=new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);}
+function save(){try{localStorage.setItem(K_C,JSON.stringify(custom));localStorage.setItem(K_D,JSON.stringify(done));}catch(e){}}
+function doneToday(){return done[today()]||[];}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+function stats(){
+  var tot=0; for(var k in done){if(done.hasOwnProperty(k)) tot+=done[k].length;}
+  var s=0, d=new Date();
+  for(var i=0;i<400;i++){
+    var key=d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);
+    if(done[key]&&done[key].length){s++;d.setDate(d.getDate()-1);}
+    else if(i===0){d.setDate(d.getDate()-1);}
+    else break;
+  }
+  document.getElementById("s-total").textContent=tot;
+  document.getElementById("s-streak").textContent=s;
+  document.getElementById("s-mine").textContent=custom.length;
+}
+
+function bindChips(id,cb){
+  var w=document.getElementById(id);
+  w.addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b) return;
+    var bs=w.querySelectorAll("button");
+    for(var i=0;i<bs.length;i++) bs[i].className=(bs[i]===b)?"on":"";
+    cb(b.getAttribute("data-v"));
+  });
+}
+bindChips("f-place",function(v){place=v;});
+bindChips("f-time",function(v){maxm=parseInt(v,10);});
+
+function pool(){
+  var src = (place==="mine") ? custom.slice() : BUILTIN.concat(custom).filter(function(x){
+    return place==="all" || x.p===place || x.p==="both";
+  });
+  var td=doneToday();
+  return src.filter(function(x){
+    if(td.indexOf(x.t)>-1) return false;
+    if(place==="mine") return true;
+    return x.m ? x.m<=maxm : true;
+  });
+}
+
+function pick(){
+  var p=pool();
+  var card=document.getElementById("card"), acts=document.getElementById("acts");
+  if(!p.length){
+    var empty = (place==="mine" && !custom.length);
+    card.innerHTML='<p class="hint">'+(empty?"你还没加过任何一条。<br>在下面写一条，一行一条。":"今天这个条件下都做过了，<br>放宽一点，或者加几条新的。")+'</p>';
+    acts.style.display="none"; cur=null; return;
+  }
+  cur=p[Math.floor(Math.random()*p.length)];
+  var tag = cur.p==="home"?"宅在家":(cur.p==="out"?"要出门":(cur.mine?"我加的":"随处可做"));
+  var tags='<span'+(cur.mine?' class="m"':'')+'>'+esc(tag)+'</span>';
+  if(cur.m) tags+='<span class="t">约 '+cur.m+' 分钟</span>';
+  if(cur.c) tags+='<span>'+esc(cur.c)+'</span>';
+  var html='<div class="tags">'+tags+'</div><p class="tt">'+esc(cur.t)+'</p>';
+  if(cur.d) html+='<p class="dd">'+esc(cur.d)+'</p>';
+  if(cur.n) html+='<div class="need"><p class="k">需要的东西</p><p class="v">'+esc(cur.n)+'</p></div>';
+  card.innerHTML=html;
+  acts.style.display="flex";
+  var ok=document.getElementById("ok"); ok.className="a2"; ok.textContent="做完打卡";
+}
+
+document.getElementById("draw").addEventListener("click",pick);
+document.getElementById("again").addEventListener("click",pick);
+document.getElementById("ok").addEventListener("click",function(){
+  if(!cur) return;
+  var t=today(); if(!done[t]) done[t]=[];
+  if(done[t].indexOf(cur.t)<0) done[t].push(cur.t);
+  save(); stats();
+  var el=this; el.className="a2 done"; el.textContent="已打卡，今天没白过";
+  var n=done[t].length;
+  setTimeout(function(){ pick(); },900);
+});
+
+function renderList(){
+  var box=document.getElementById("list");
+  if(!custom.length){box.innerHTML="";return;}
+  var h='<p class="lh">我加的 '+custom.length+' 条</p>';
+  for(var i=0;i<custom.length;i++){
+    h+='<div class="item"><span class="t">'+esc(custom[i].t)+'</span><span class="d" data-i="'+i+'">删掉</span></div>';
+  }
+  box.innerHTML=h;
+}
+document.getElementById("list").addEventListener("click",function(e){
+  var d=e.target.closest(".d"); if(!d) return;
+  custom.splice(parseInt(d.getAttribute("data-i"),10),1);
+  save(); renderList(); stats();
+  if(cur&&place==="mine") pick();
+});
+
+function addItems(){
+  var ta=document.getElementById("i-t"), msg=document.getElementById("msg");
+  var lines=ta.value.split("\n").map(function(s){return s.trim();}).filter(function(s){return s.length>0;});
+  if(!lines.length){msg.style.display="block";msg.style.color="#A32D2D";msg.textContent="先写点什么再点加上。";return;}
+  var added=0;
+  for(var i=0;i<lines.length;i++){
+    var dup=false;
+    for(var j=0;j<custom.length;j++){if(custom[j].t===lines[i]){dup=true;break;}}
+    if(dup) continue;
+    custom.push({t:lines[i],d:"",n:"",p:"both",m:0,mine:true});
+    added++;
+  }
+  ta.value="";
+  msg.style.display="block";
+  msg.style.color=added?"#0F6E56":"#888780";
+  msg.textContent=added?("加了 "+added+" 条，切到「我加的」就能抽到。"):"这些都加过了，写点新的吧。";
+  save(); renderList(); stats();
+}
+document.getElementById("add").addEventListener("click",addItems);
+
+stats(); renderList();
+</script>
+</body>
+</html>
